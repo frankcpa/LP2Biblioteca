@@ -1,13 +1,14 @@
+package br.com.model;
 import java.util.Date;
 
-public class Anime {
+public class AnimeModel {
 	private Date dataLancamento;
 	private String titulo;
 	private String genero;
 	private String estudio;
 	private String sinopse;
 	
-	public Anime(Date dataLancamento, String titulo, String genero, String estudio, String sinopse) {
+	public AnimeModel(Date dataLancamento, String titulo, String genero, String estudio, String sinopse) {
 		this.dataLancamento = dataLancamento;
 		this.titulo = titulo;
 		this.genero = genero;
@@ -15,6 +16,8 @@ public class Anime {
 		this.sinopse = sinopse;
 	}
 
+	public AnimeModel(){}
+	
 	public Date getDataLancamento() {
 		return dataLancamento;
 	}
@@ -54,8 +57,4 @@ public class Anime {
 	public void setSinopse(String sinopse) {
 		this.sinopse = sinopse;
 	}
-	
-	
-	
-	
 }
