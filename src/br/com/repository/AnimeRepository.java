@@ -8,9 +8,9 @@ import br.com.model.*;
 
 public class AnimeRepository {
 	static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	private static Connection conexao;
+	private Connection conexao;
 
-	public static void criaConexao() throws SQLException{
+	public void criaConexao() throws SQLException{
 		try {
 			if (conexao.isClosed()) {
 				conexao = DriverManager.getConnection("jdbc:mysql://localhost/LP2_Utilidades", "root", "root123");

@@ -13,11 +13,11 @@ public class App {
 	public static void main(String[] args) throws SQLException {
 		int op;
 		AnimeRepository repositorio = new AnimeRepository();
-		AnimeModel anime;
+		AnimeModel anime = null;
+		repositorio.criaConexao();
 
 		do {
 			op = menu();
-			System.out.println(op);
 			switch (op) {
 				case 1:
 					anime = coletaDados();
