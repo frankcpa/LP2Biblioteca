@@ -12,19 +12,19 @@ public class App {
 
 	public static void main(String[] args) throws SQLException {
 		int op;
-		AnimeRepository repositorio = new AnimeRepository();
+		AnimeRepository animeRepositorio = new AnimeRepository();
 		AnimeModel anime = null;
-		repositorio.criaConexao();
+		animeRepositorio.criaConexao();
 
 		do {
 			op = menu();
 			switch (op) {
 				case 1:
 					anime = coletaDados();
-					//salvaArquivo(anime);
+					animeRepositorio.salvar(anime);
 					break;
 				case 2:
-					repositorio.buscarTodos();
+					animeRepositorio.buscarTodos();
 					break;
 				case 0:
 					break;
@@ -44,7 +44,7 @@ public class App {
 		String sinopse;
 
 		do {
-			dataLancamento = JOptionPane.showInputDialog(null, "Digite a data de lançamento do anime no formato dd/MM/yyyy");
+			dataLancamento = JOptionPane.showInputDialog(null, "Digite a data de lançamento do anime no formato dd/MM/yyyy","10/08/2024");
 			
 			sdf.setLenient(false);
 			try {
@@ -56,26 +56,24 @@ public class App {
 			}
 		} while (data == null);
 
-		System.out.println("Digite o titulo do anime: ");
-		titulo = scanner.nextLine();
+		titulo = JOptionPane.showInputDialog(null, "Digite o titulo do anime","Teste titulo");
 
-		System.out.println("Digite os generos do anime: ");
-		genero = scanner.nextLine();
+		genero = JOptionPane.showInputDialog(null, "Digite os generos do anime","teste genero");
 
-		System.out.println("Digite o studio que fez o anime");
-		estudio = scanner.nextLine();
+		estudio = JOptionPane.showInputDialog(null, "Digite o studio que fez o anime","teste studio");
 
-		System.out.println("Digite a sinopse do anime");
-		sinopse = scanner.nextLine();
+		sinopse = JOptionPane.showInputDialog(null, "Digite a sinopse do anime","teste sinopse");
 
 		return new AnimeModel(data, titulo, genero, estudio, sinopse);
 	}
 
 	static int menu() {
 		String menu = "\nDigite o número correspondente\n1 - para cadastrar um anime e salvar em um BD\n";
-		menu += "2 - exibir os dados no banco\n0 - para fechar o programa";
+		menu += "2 - exibir todos os animes cadastrados\n0 - para fechar o programa";
 
-		return Integer.parseInt(JOptionPane.showInputDialog(null, menu));
+		String opt = JOptionPane.showInputDialog(null, menu);
+
+		return Integer.parseInt(opt);
 	}
 
 }

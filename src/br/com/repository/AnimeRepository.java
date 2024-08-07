@@ -2,17 +2,21 @@ package br.com.repository;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+
+import javax.swing.JOptionPane;
+
 import br.com.model.*;
 
 public class AnimeRepository {
 	static SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	private Connection conexao;
+	public static Connection conexao=null;
 
 	public void criaConexao() throws SQLException{
 		try {
-			if (conexao.isClosed()) {
+			if (conexao == null || conexao.isClosed()) {
 				conexao = DriverManager.getConnection("jdbc:mysql://localhost/LP2_Utilidades", "root", "root123");
 			}
 		} catch (Exception e) {
@@ -21,7 +25,20 @@ public class AnimeRepository {
 	}
 
 	public void buscarTodos() {
+		try {
+			String retorno="";
+			// Prepara a instrução SQL
+			PreparedStatement ps = conexao.prepareStatement("select * from Anime");
+			ResultSet resultado = ps.executeQuery();
 
+			while (resultado.next()) {
+				retorno += "Data: " + resultado.getDate("dataLancamento") + " - Titulo: " + resultado.getString("titulo") + "\n";
+			}
+
+			JOptionPane.showMessageDialog(null, retorno);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void buscarPorGenero() {
@@ -29,13 +46,17 @@ public class AnimeRepository {
 	}
 
 	public void salvar(AnimeModel anime) throws SQLException {
-		//criaConexao();
 		try {
-			String sql = "INSERT INTO Anime (dataLancamento,titulo,genero,estudio,sinopse) VALUES ('2024/10/10','Titulo 1','Gen 1', 'Est 1', 'Sinop 1')";
+			String sql = "INSERT INTO Anime (dataLancamento,titulo,genero,estudio,sinopse) VALUES (?,?,?,?,?)";
 			// Prepara a instrução SQL
 			PreparedStatement ps = conexao.prepareStatement(sql);
+			ps.setDate(1, new java.sql.Date(anime.getDataLancamento().getTime()));
+			ps.setString(2, anime.getTitulo());
+			ps.setString(3, anime.getGenero());
+			ps.setString(4, anime.getEstudio());
+			ps.setString(5, anime.getSinopse());
 			// Executa a instrução SQL
-			ps.execute();
+			ps.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 			conexao.rollback();
