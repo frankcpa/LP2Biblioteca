@@ -26,6 +26,14 @@ public class App {
 				case 2:
 					animeRepositorio.buscarTodos();
 					break;
+				case 3:
+					String titulo = JOptionPane.showInputDialog(null, "Entre com o titulo");
+					animeRepositorio.buscarPorTitulo(titulo);
+					break;
+				case 4:
+					String id = JOptionPane.showInputDialog(null, "Entre com o ID para remover");
+					animeRepositorio.remover(id);
+					break;
 				case 0:
 					break;
 				default:
@@ -44,8 +52,9 @@ public class App {
 		String sinopse;
 
 		do {
-			dataLancamento = JOptionPane.showInputDialog(null, "Digite a data de lançamento do anime no formato dd/MM/yyyy","10/08/2024");
-			
+			dataLancamento = JOptionPane.showInputDialog(null,
+					"Digite a data de lançamento do anime no formato dd/MM/yyyy", "10/08/2024");
+
 			sdf.setLenient(false);
 			try {
 				data = sdf.parse(dataLancamento);
@@ -56,20 +65,21 @@ public class App {
 			}
 		} while (data == null);
 
-		titulo = JOptionPane.showInputDialog(null, "Digite o titulo do anime","Teste titulo");
+		titulo = JOptionPane.showInputDialog(null, "Digite o titulo do anime", "Teste titulo");
 
-		genero = JOptionPane.showInputDialog(null, "Digite os generos do anime","teste genero");
+		genero = JOptionPane.showInputDialog(null, "Digite os generos do anime", "teste genero");
 
-		estudio = JOptionPane.showInputDialog(null, "Digite o studio que fez o anime","teste studio");
+		estudio = JOptionPane.showInputDialog(null, "Digite o studio que fez o anime", "teste studio");
 
-		sinopse = JOptionPane.showInputDialog(null, "Digite a sinopse do anime","teste sinopse");
+		sinopse = JOptionPane.showInputDialog(null, "Digite a sinopse do anime", "teste sinopse");
 
 		return new AnimeModel(data, titulo, genero, estudio, sinopse);
 	}
 
 	static int menu() {
 		String menu = "\nDigite o número correspondente\n1 - para cadastrar um anime e salvar em um BD\n";
-		menu += "2 - exibir todos os animes cadastrados\n0 - para fechar o programa";
+		menu += "2 - exibir todos os animes cadastrados\n3 - para buscar por Titulo\n";
+		menu += "4 - remover\n0 - para fechar o programa";
 
 		String opt = JOptionPane.showInputDialog(null, menu);
 

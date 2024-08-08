@@ -32,7 +32,9 @@ public class AnimeRepository {
 			ResultSet resultado = ps.executeQuery();
 
 			while (resultado.next()) {
-				retorno += "Data: " + resultado.getDate("dataLancamento") + " - Titulo: " + resultado.getString("titulo") + "\n";
+				retorno += "ID: " + resultado.getInt("idAnime") +
+				"Data: " + resultado.getDate("dataLancamento") +
+				 " - Titulo: " + resultado.getString("titulo") + "\n";
 			}
 
 			JOptionPane.showMessageDialog(null, retorno);
@@ -41,8 +43,37 @@ public class AnimeRepository {
 		}
 	}
 
-	public void buscarPorGenero() {
+	public void buscarPorTitulo(String titulo) {
+		try {
+			String retorno="";
+			// Prepara a instrução SQL
+			PreparedStatement ps = conexao.prepareStatement("select * from Anime where titulo like '%"+titulo+"%'");
+			ResultSet resultado = ps.executeQuery();
 
+			while (resultado.next()) {
+				retorno += "Data: " + resultado.getDate("dataLancamento") +
+				 " - Titulo: " + resultado.getString("titulo") + "\n";
+			}
+
+			JOptionPane.showMessageDialog(null, retorno);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public void remover(String id){
+		try {
+			String sql = "Delete from Anime where idAnime = ?";
+			// Prepara a instrução SQL
+			PreparedStatement ps = conexao.prepareStatement(sql);
+			ps.setString(1, id);
+			// Executa a instrução SQL
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			//conexao.rollback();
+		}
 	}
 
 	public void salvar(AnimeModel anime) throws SQLException {
