@@ -12,15 +12,16 @@ public class App {
 
 	public static void main(String[] args) throws SQLException {
 		int op;
+		String id;
 		AnimeRepository animeRepositorio = new AnimeRepository();
-		AnimeModel anime = null;
+		AnimeModel anime = new AnimeModel();
 		animeRepositorio.criaConexao();
 
 		do {
 			op = menu();
 			switch (op) {
 				case 1:
-					anime = coletaDados();
+					anime = coletaDados(anime);
 					animeRepositorio.salvar(anime);
 					break;
 				case 2:
@@ -31,8 +32,18 @@ public class App {
 					animeRepositorio.buscarPorTitulo(titulo);
 					break;
 				case 4:
-					String id = JOptionPane.showInputDialog(null, "Entre com o ID para remover");
+					id = JOptionPane.showInputDialog(null, "Entre com o ID para remover");
 					animeRepositorio.remover(id);
+					break;
+				case 5:
+					id = JOptionPane.showInputDialog(null, "Entre com o ID para Editar");
+					anime = animeRepositorio.buscarPorId(id);
+					if (anime.getIdAnime()==0) {
+						JOptionPane.showMessageDialog(null, "Registro não encontrado");
+					}else{
+						anime = coletaDados(anime);
+						animeRepositorio.editar(anime);
+					}
 					break;
 				case 0:
 					break;
@@ -43,17 +54,13 @@ public class App {
 
 	}
 
-	private static AnimeModel coletaDados() {
+	private static AnimeModel coletaDados(AnimeModel anime) {
 		String dataLancamento;
 		Date data = null;
-		String titulo;
-		String genero;
-		String estudio;
-		String sinopse;
 
 		do {
 			dataLancamento = JOptionPane.showInputDialog(null,
-					"Digite a data de lançamento do anime no formato dd/MM/yyyy", "10/08/2024");
+					"Digite a data de lançamento do anime no formato dd/MM/yyyy", anime.getDataLancamento());
 
 			sdf.setLenient(false);
 			try {
@@ -65,21 +72,20 @@ public class App {
 			}
 		} while (data == null);
 
-		titulo = JOptionPane.showInputDialog(null, "Digite o titulo do anime", "Teste titulo");
+		anime.setDataLancamento(data);
+		anime.setTitulo(JOptionPane.showInputDialog(null, "Digite o titulo do anime",anime.getTitulo()));
+		anime.setGenero(JOptionPane.showInputDialog(null, "Digite os generos do anime", anime.getGenero()));
+		anime.setEstudio(JOptionPane.showInputDialog(null, "Digite o studio que fez o anime", anime.getEstudio()));
+		anime.setSinopse(JOptionPane.showInputDialog(null, "Digite a sinopse do anime", anime.getSinopse()));
 
-		genero = JOptionPane.showInputDialog(null, "Digite os generos do anime", "teste genero");
-
-		estudio = JOptionPane.showInputDialog(null, "Digite o studio que fez o anime", "teste studio");
-
-		sinopse = JOptionPane.showInputDialog(null, "Digite a sinopse do anime", "teste sinopse");
-
-		return new AnimeModel(data, titulo, genero, estudio, sinopse);
+		return anime;
 	}
 
 	static int menu() {
 		String menu = "\nDigite o número correspondente\n1 - para cadastrar um anime e salvar em um BD\n";
 		menu += "2 - exibir todos os animes cadastrados\n3 - para buscar por Titulo\n";
-		menu += "4 - remover\n0 - para fechar o programa";
+		menu += "4 - remover\n";
+		menu += "5 - Editar\n0 - para fechar o programa";
 
 		String opt = JOptionPane.showInputDialog(null, menu);
 

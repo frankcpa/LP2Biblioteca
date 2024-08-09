@@ -2,6 +2,7 @@ package br.com.model;
 import java.util.Date;
 
 public class AnimeModel {
+	private int idAnime;
 	private Date dataLancamento;
 	private String titulo;
 	private String genero;
@@ -18,6 +19,13 @@ public class AnimeModel {
 
 	public AnimeModel(){}
 	
+	public int getIdAnime() {
+		return idAnime;
+	}
+
+	public void setIdAnime(int idAnime) {
+		this.idAnime = idAnime;
+	}
 	public Date getDataLancamento() {
 		return dataLancamento;
 	}

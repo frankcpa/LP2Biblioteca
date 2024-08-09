@@ -61,6 +61,25 @@ public class AnimeRepository {
 		}
 	}
 
+	public AnimeModel buscarPorId(String id) {
+		AnimeModel anime = new AnimeModel();
+		try {
+			PreparedStatement ps = conexao.prepareStatement("select * from Anime where idAnime = "+id+"");
+			ResultSet resultado = ps.executeQuery();
+			while (resultado.next()) {
+				anime.setIdAnime(resultado.getInt("idAnime"));
+				anime.setDataLancamento(resultado.getDate("dataLancamento"));
+				anime.setTitulo(resultado.getString("titulo"));
+				anime.setGenero(resultado.getString("genero"));
+				anime.setEstudio(resultado.getString("estudio"));
+				anime.setSinopse(resultado.getString("sinopse"));
+			}
+			//JOptionPane.showMessageDialog(null, );
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return anime;
+	}
 
 	public void remover(String id){
 		try {
@@ -79,6 +98,24 @@ public class AnimeRepository {
 	public void salvar(AnimeModel anime) throws SQLException {
 		try {
 			String sql = "INSERT INTO Anime (dataLancamento,titulo,genero,estudio,sinopse) VALUES (?,?,?,?,?)";
+			// Prepara a instrução SQL
+			PreparedStatement ps = conexao.prepareStatement(sql);
+			ps.setDate(1, new java.sql.Date(anime.getDataLancamento().getTime()));
+			ps.setString(2, anime.getTitulo());
+			ps.setString(3, anime.getGenero());
+			ps.setString(4, anime.getEstudio());
+			ps.setString(5, anime.getSinopse());
+			// Executa a instrução SQL
+			ps.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+			conexao.rollback();
+		}
+	}
+
+	public void editar(AnimeModel anime) throws SQLException {
+		try {
+			String sql = "Update Anime set dataLancamento=?,titulo=?,genero=?,estudio=?,sinopse=? where idAnime = "+anime.getIdAnime();
 			// Prepara a instrução SQL
 			PreparedStatement ps = conexao.prepareStatement(sql);
 			ps.setDate(1, new java.sql.Date(anime.getDataLancamento().getTime()));
